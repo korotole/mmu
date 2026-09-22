@@ -1,0 +1,48 @@
+{"q": "Co je technologie staveb jako vědní obor a jak se dělí?", "lang": "cs", "chapter": 1}
+{"q": "Jaké jsou rozdíly mezi výrobním systémem ve stavebnictví a průmyslovou výrobou?", "lang": "cs", "chapter": 1}
+{"q": "Co obsahuje stavebně technologická studie?", "lang": "cs", "chapter": 2, "sections": ["2.7"]}
+{"q": "Jak probíhá veřejnoprávní projednání stavby a jaké jsou stavební úřady?", "lang": "cs", "chapter": 2}
+{"q": "Jaké jsou prvky výrobního procesu jako systému?", "lang": "cs", "chapter": 3, "sections": ["3.1"]}
+{"q": "Co jsou stupně rozestavěnosti a technologické etapy objektu?", "lang": "cs", "chapter": 4, "sections": ["4.1"]}
+{"q": "Jaký je rozdíl mezi předvýrobní, výrobní a provozní přípravou?", "lang": "cs", "chapter": 5, "sections": ["5.1", "5.2", "5.3"]}
+{"q": "Jak se dimenzuje zásobování staveniště vodou a elektřinou?", "lang": "cs", "chapter": 6, "sections": ["6.3", "6.4"]}
+{"q": "Co patří do sociálního zařízení staveniště?", "lang": "cs", "chapter": 6, "sections": ["6.2"]}
+{"q": "Jak probíhá předání a převzetí staveniště a jaké orgány vykonávají dozor?", "lang": "cs", "chapter": 7, "sections": ["7.1", "7.3"]}
+{"q": "Co je stavební deník a kdo do něj zapisuje?", "lang": "cs", "chapter": 7, "sections": ["7.4"]}
+{"q": "Jaké metody síťové analýzy se používají pro časové plánování výstavby (CPM, STSG)?", "lang": "cs", "chapter": 9, "sections": ["9.1", "9.2", "9.3", "9.4"]}
+{"q": "Co je kritická cesta a jak se počítají rezervy v metodě CPM?", "lang": "cs", "chapter": 9, "sections": ["9.2"]}
+{"q": "Jaké datové základny jsou potřebné pro počítačové modelování realizace staveb?", "lang": "cs", "chapter": 10, "sections": ["10.2"]}
+{"q": "Jak se tvoří kontrolní a zkušební plán stavby?", "lang": "cs", "chapter": 10, "sections": ["10.5"]}
+{"q": "Jak se zajišťuje staveniště z hlediska bezpečnosti práce?", "lang": "cs", "chapter": 12, "sections": ["12.3"]}
+{"q": "Jak se zajišťuje ochrana životního prostředí při výstavbě?", "lang": "cs", "chapter": 13, "sections": ["13.2"]}
+{"q": "Jak probíhá recyklace stavebního odpadu?", "lang": "cs", "chapter": 13, "sections": ["13.3"]}
+{"q": "What is construction technology as a scientific discipline?", "lang": "en", "chapter": 1}
+{"q": "How does the production system in construction differ from industrial production?", "lang": "en", "chapter": 1}
+{"q": "What are the steps of completion and technological stages of a building?", "lang": "en", "chapter": 3, "sections": ["3.1"]}
+{"q": "What is the difference between preproduction, production and operational planning?", "lang": "en", "chapter": 4, "sections": ["4.1", "4.2", "4.3"]}
+{"q": "What are the construction technology principles for site preparation?", "lang": "en", "chapter": 4, "sections": ["4.4"]}
+{"q": "Jak se vytváří model stavění objektu?", "lang": "cs", "chapter": 1, "sections": ["1.4"]}
+{"q": "Proč je stavebně technologická příprava důležitá pro realizaci stavby?", "lang": "cs", "chapter": 1, "sections": ["1.6"]}
+{"q": "Co zahrnuje řízení výrobních procesů na stavbě?", "lang": "cs", "chapter": 1, "sections": ["1.7"]}
+{"q": "Které zákony a předpisy upravují přípravu a realizaci staveb?", "lang": "cs", "chapter": 2, "sections": ["2.1"]}
+{"q": "Jakými způsoby lze projednat stavbu se stavebním úřadem?", "lang": "cs", "chapter": 2, "sections": ["2.2"]}
+{"q": "Co musí obsahovat projektová dokumentace stavby?", "lang": "cs", "chapter": 2, "sections": ["2.4"]}
+{"q": "Co je prostorová struktura stavebního procesu?", "lang": "cs", "chapter": 3, "sections": ["3.2.2"]}
+{"q": "Co je technologická struktura stavebního procesu?", "lang": "cs", "chapter": 3, "sections": ["3.2.3"]}
+{"q": "Jaké jsou hlavní znaky etapových procesů u sourodých objektů?", "lang": "cs", "chapter": 4, "sections": ["4.2"]}
+{"q": "Jaké stavebně technologické zásady platí pro návrh zařízení staveniště?", "lang": "cs", "chapter": 5, "sections": ["5.4"]}
+{"q": "Jak se navrhují skladovací plochy na staveništi?", "lang": "cs", "chapter": 6, "sections": ["6.5"]}
+{"q": "Jak se skladují a manipulují prefabrikáty na staveništi?", "lang": "cs", "chapter": 6, "sections": ["6.6"]}
+{"q": "Podle čeho se volí zvedací prostředky, například jeřáb, pro stavbu?", "lang": "cs", "chapter": 6, "sections": ["6.8"]}
+{"q": "Kdo tvoří management stavby a jaké má úkoly?", "lang": "cs", "chapter": 7, "sections": ["7.2"]}
+{"q": "Jak probíhá předání a převzetí dokončené stavby a zahájení jejího užívání?", "lang": "cs", "chapter": 7, "sections": ["7.5"]}
+{"q": "Jaké jsou základní metody organizace stavebních procesů?", "lang": "cs", "chapter": 8, "sections": ["8.1"]}
+{"q": "Jak se zobrazuje proudové stavění řady objektů?", "lang": "cs", "chapter": 8, "sections": ["8.8"]}
+{"q": "Co je metoda stavebnicového síťového plánování BKN?", "lang": "cs", "chapter": 9, "sections": ["9.3"]}
+{"q": "Co je stavebně technologický síťový graf STSG a jaké vazby používá?", "lang": "cs", "chapter": 9, "sections": ["9.4"]}
+{"q": "Jak se modeluje proces realizace konkrétního objektu v systému CONTEC?", "lang": "cs", "chapter": 10, "sections": ["10.3"]}
+{"q": "Jak se přebírají data z výrobních kalkulací do modelu realizace?", "lang": "cs", "chapter": 10, "sections": ["10.6"]}
+{"q": "Jaké jsou zásady operativního řízení stavební výroby?", "lang": "cs", "chapter": 10, "sections": ["10.7"]}
+{"q": "Jaké požadavky na bezpečnost práce má splňovat projektová a výrobní příprava stavby?", "lang": "cs", "chapter": 12, "sections": ["12.2"]}
+{"q": "Jaké úkoly mají účastníci výstavby z hlediska bezpečnosti práce?", "lang": "cs", "chapter": 12, "sections": ["12.4"]}
+{"q": "Jaké jsou úlohy ochrany životního prostředí ve výstavbě?", "lang": "cs", "chapter": 13, "sections": ["13.1"]}

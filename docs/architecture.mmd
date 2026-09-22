@@ -1,0 +1,64 @@
+%% stavby-rag architecture (same content as docs/architecture.drawio)
+flowchart LR
+    subgraph OFF["Offline: build the index (once) — stavby crawl | ingest | index"]
+        direction LR
+        site["Textbook site<br/>technologie.fsv.cvut.cz<br/>4 editions · windows-1250 HTML"]
+        pdf["PDF books<br/>scanned / broken text layer"]
+        crawler["Crawler<br/>scoped BFS + extractor"]
+        pdfbook["PdfBook<br/>PyMuPDF + Apple Vision OCR"]
+        pages[/"data/pages.jsonl<br/>Page records: url, lang, edition,<br/>chapter, section, title, text"/]
+        chunker["Chunker<br/>~1400 chars, 200 overlap<br/>breadcrumb prefix"]
+        embed["Qwen3-Embedding-8B Q8_0<br/>via Ollama · 4096-d"]
+        bm25["BM25 (bm25s)<br/>diacritics-folded + prefix stem"]
+        subgraph IDX["data/index/"]
+            direction TB
+            f_chunks["chunks.jsonl"]
+            f_dense["dense.npy<br/>N × 4096 float32"]
+            f_bm25["bm25/"]
+            f_meta["meta.json<br/>embed backend + model"]
+        end
+        site -- HTML --> crawler -- Page records --> pages
+        pdf --> pdfbook -- same Page records --> pages
+        pages --> chunker
+        chunker -- "Chunk[]" --> embed --> f_dense
+        chunker -- "Chunk[]" --> bm25 --> f_bm25
+        chunker -.-> f_chunks
+        embed -.-> f_meta
+    end
+
+    subgraph ON["Online: answer a question — stavby ask | chat | serve"]
+        direction LR
+        question["Question<br/>CLI stavby ask / chat<br/>or Telegram-style Web UI / REST API"]
+        engine["Engine<br/>index loaded once in memory<br/>models kept warm (keep_alive=-1)<br/>hits + answers LRU"]
+        lang["lang detect + mask<br/>cs / en · edition full | demo"]
+        hybrid["dense top-40 ∪ BM25 top-40"]
+        rrf1(("RRF"))
+        reranker["Qwen3-Reranker-8B Q8_0<br/>P(yes) via Ollama logprobs<br/>top 12 candidates"]
+        rrf2(("RRF<br/>rerank + retrieval"))
+        top10[/"top-10 passages<br/>neighbour de-dup"/]
+        prompt["prompt<br/>system rules + numbered sources<br/>bodies ≤ 1000 chars, no URLs<br/>+ conversation history"]
+        llm["LLM<br/>Claude claude-opus-5 (Anthropic API)<br/>or local qwen3:14b (Ollama)"]
+        answer["streamed answer<br/>[n] citations + source links<br/>back to the textbook pages"]
+        question --> engine --> lang -- mask --> hybrid --> rrf1 -- top 12 --> reranker --> rrf2
+        rrf1 -. retrieval order .-> rrf2
+        rrf2 --> top10 --> prompt --> llm -- tokens stream --> answer
+    end
+
+    IDX -. loaded once at start .-> engine
+
+    note1["everything runs on one laptop (24 GB Mac)"]
+    note2["~1.4k chunks: brute-force cosine beats a vector DB here"]
+    note3["measured: num_batch / NUM_PARALLEL / parallel<br/>workers = no gain · prefill 137 tok/s,<br/>gen 12 tok/s = bandwidth ceiling"]
+    note4["speed levers: rerank pool 12 (34→21 s),<br/>prompt source trim 1000 chars (−7 s),<br/>llama.cpp prefix cache (repeat = 0.1 s)"]
+    note2 -.- IDX
+    note3 -.- reranker
+    note4 -.- engine
+
+    classDef proc fill:#DAE8FC,stroke:#4D4D4D,color:#333;
+    classDef data fill:#FFF2CC,stroke:#4D4D4D,color:#333;
+    classDef io fill:#F5F5F5,stroke:#4D4D4D,color:#333;
+    classDef note fill:#FFF2CC,stroke:#4D4D4D,stroke-dasharray:4 3,color:#333;
+    class crawler,pdfbook,chunker,embed,bm25,engine,lang,hybrid,rrf1,reranker,rrf2,llm proc;
+    class pages,f_chunks,f_dense,f_bm25,f_meta,top10,prompt data;
+    class site,pdf,question,answer io;
+    class note1,note2,note3,note4 note;

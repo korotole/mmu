@@ -1,0 +1,396 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Stavby · učebnice</title>
+<style>
+  /* Telegram Desktop palette, light + dark; follows the system via prefers-color-scheme. */
+  :root {
+    --bg: #ffffff;                 /* chat wall */
+    --bg-pattern: #f4f4f5;
+    --panel: #ffffff;              /* incoming bubble */
+    --ink: #000000;
+    --muted: #707579;
+    --line: #e4e9ec;               /* hairlines */
+    --accent: #3390ec;             /* TG web blue */
+    --accent-ink: #ffffff;
+    --user: #effdde;               /* outgoing bubble (light green) */
+    --user-ink: #000000;
+    --cite: #3390ec;
+    --err: #e53935;
+    --field: #ffffff;
+    --hover: #f4f4f5;
+    --shadow: 0 1px 1px rgba(16,35,47,.10), 0 2px 6px rgba(16,35,47,.06);
+    --radius: 12px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0e1621;               /* TG dark chat wall */
+      --bg-pattern: #0e1621;
+      --panel: #182533;            /* incoming bubble */
+      --ink: #ffffff;
+      --muted: #708499;
+      --line: #101921;
+      --accent: #5288c1;
+      --accent-ink: #ffffff;
+      --user: #2b5278;             /* outgoing bubble (dark blue) */
+      --user-ink: #ffffff;
+      --cite: #6ab3f3;
+      --err: #ff8a80;
+      --field: #17212b;            /* TG dark sidebar/input */
+      --hover: #17212b;
+      --shadow: 0 1px 1px rgba(0,0,0,.25), 0 2px 8px rgba(0,0,0,.2);
+    }
+  }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    margin: 0; background: var(--bg-pattern); color: var(--ink);
+    font: 15px/1.45 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    display: flex; flex-direction: column;
+  }
+  header {
+    position: sticky; top: 0; z-index: 2; background: var(--field);
+    padding: calc(8px + env(safe-area-inset-top, 0px)) 16px 8px; border-bottom: 1px solid var(--line);
+    display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px;
+  }
+  header h1 { font-size: 15px; margin: 0; font-weight: 600; letter-spacing: .01em; }
+  header h1 small { display: block; font-size: 12px; font-weight: 400; color: var(--accent); }
+  .spacer { flex: 1; }
+  .ctl { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+  select, .seg, button, textarea, input {
+    font: inherit; color: inherit; border: 1px solid var(--line); background: var(--panel); border-radius: 8px;
+  }
+  select, input { padding: 5px 8px; font-size: 13px; }
+  input { width: 12em; }
+  .seg { display: inline-flex; overflow: hidden; padding: 0; }
+  .seg button { border: 0; border-radius: 0; padding: 5px 10px; font-size: 13px; background: transparent; cursor: pointer; color: var(--muted); }
+  .seg button + button { border-left: 1px solid var(--line); }
+  .seg button.on { background: var(--accent); color: var(--accent-ink); }
+  .btn { padding: 5px 11px; font-size: 13px; cursor: pointer; color: var(--accent); border-color: transparent; background: transparent; font-weight: 500; }
+  .btn:hover { background: var(--hover); }
+  main { flex: 1; width: 100%; max-width: 780px; margin: 0 auto; padding: 18px 16px 8px; display: flex; flex-direction: column; gap: 12px; }
+  .empty { margin: auto 0; text-align: center; color: var(--muted); padding: 40px 0 20px; }
+  .empty p { margin: 0 0 16px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+  .chip { padding: 8px 13px; border-radius: 16px; font-size: 13px; cursor: pointer; text-align: left;
+          background: var(--panel); border: 1px solid var(--line); color: var(--accent); }
+  .chip:hover { border-color: var(--accent); }
+  .msg { max-width: 82%; display: flex; flex-direction: column; gap: 5px; }
+  .msg.user { align-self: flex-end; align-items: flex-end; }
+  .msg.user .body { background: var(--user); color: var(--user-ink); border-radius: var(--radius); border-bottom-right-radius: 4px; padding: 9px 13px; white-space: pre-wrap; box-shadow: var(--shadow); }
+  .msg.bot { align-self: flex-start; width: 100%; max-width: 100%; }
+  .msg.bot .body { background: var(--panel); border-radius: var(--radius); border-bottom-left-radius: 4px; padding: 11px 14px; box-shadow: var(--shadow); }
+  .body p { margin: 0 0 .65em; } .body p:last-child { margin-bottom: 0; }
+  .body ul, .body ol { margin: 0 0 .65em; padding-left: 1.4em; } .body li { margin: .15em 0; }
+  .body code { font-size: .9em; background: rgba(51,144,236,.10); padding: 0 4px; border-radius: 4px; }
+  .body h4 { margin: .6em 0 .3em; font-size: 1em; }
+  a.cite { color: var(--cite); text-decoration: none; font-size: .82em; font-weight: 600; vertical-align: 6%; padding: 0 1px; }
+  a.cite:hover { text-decoration: underline; }
+  .status { color: var(--muted); font-size: 13px; display: flex; align-items: center; gap: 8px; padding-left: 6px; }
+  .status .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); animation: pulse 1.1s ease-in-out infinite; }
+  @keyframes pulse { 0%,100% { opacity: .25; transform: scale(.8);} 50% { opacity: 1; transform: scale(1);} }
+  .caret::after { content: "▍"; color: var(--accent); animation: pulse 1s infinite; }
+  details.src { font-size: 13px; color: var(--muted); padding-left: 6px; }
+  details.src summary { cursor: pointer; user-select: none; }
+  details.src summary:hover { color: var(--accent); }
+  details.src ol { margin: 6px 0 0; padding-left: 1.6em; }
+  details.src li { margin: 3px 0; }
+  details.src a { color: var(--cite); text-decoration: none; } details.src a:hover { text-decoration: underline; }
+  details.src .loc { color: var(--muted); }
+  .foot { font-size: 12px; color: var(--muted); padding-left: 4px; }
+  .error .body { border: 1px solid var(--err); color: var(--err); }
+  footer {
+    position: sticky; bottom: 0; background: var(--bg-pattern); border-top: 1px solid var(--line);
+    padding: 10px 16px calc(10px + env(safe-area-inset-bottom, 0px));
+  }
+  .composer { max-width: 780px; margin: 0 auto; display: flex; gap: 8px; align-items: flex-end; }
+  textarea { flex: 1; resize: none; padding: 10px 14px; min-height: 42px; max-height: 40vh; line-height: 1.4;
+             background: var(--panel); box-shadow: var(--shadow); border: 1px solid transparent; }
+  textarea:focus, select:focus, input:focus { outline: 2px solid var(--accent); outline-offset: -1px; }
+  .send { background: var(--accent); color: var(--accent-ink); border-color: transparent; padding: 0 16px; height: 42px; font-weight: 600; cursor: pointer; border-radius: 10px; }
+  .send:disabled { opacity: .5; cursor: default; }
+  .send:not(:disabled):hover { filter: brightness(1.06); }
+  .hint { max-width: 780px; margin: 6px auto 0; font-size: 11px; color: var(--muted); }
+  [hidden] { display: none !important; }
+  @media (max-width: 560px) { header h1 small { display: none; } .msg { max-width: 94%; } .hint { display: none; } }
+</style>
+</head>
+<body>
+<header>
+  <h1>Stavby · učebnice <small id="sub">připojuji…</small></h1>
+  <span class="spacer"></span>
+  <div class="ctl">
+    <select id="corpus" title="Korpus"></select>
+    <div class="seg" id="lang" role="group" aria-label="Jazyk">
+      <button data-v="" class="on">auto</button><button data-v="cs">čeština</button><button data-v="en">english</button>
+    </div>
+    <input id="token" type="password" placeholder="API token" hidden>
+    <button class="btn" id="reset">Nová konverzace</button>
+  </div>
+</header>
+
+<main id="log">
+  <div class="empty" id="empty">
+    <p>Zeptej se na cokoli z učebnice <em>Příprava a realizace staveb</em>. Odpověď cituje zdrojové kapitoly.</p>
+    <div class="chips">
+      <button class="chip">Co je stavebně technologická studie a co obsahuje?</button>
+      <button class="chip">Jaké jsou stupně rozestavěnosti?</button>
+      <button class="chip">What does a construction site layout plan contain?</button>
+      <button class="chip">What is the critical path in a construction schedule?</button>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <form class="composer" id="form">
+    <textarea id="q" rows="1" placeholder="Napiš otázku… (Enter odešle, Shift+Enter nový řádek)" autofocus></textarea>
+    <button class="send" id="send" type="submit">Odeslat</button>
+  </form>
+  <div class="hint">Odpovědi vychází pouze z textu učebnice a nejsou právně závazné · <span id="hintinfo"></span></div>
+</footer>
+
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const log = $("log"), empty = $("empty"), form = $("form"), q = $("q"), sendBtn = $("send");
+  const corpusSel = $("corpus"), langSeg = $("lang"), tokenIn = $("token");
+  const store = { get: k => { try { return localStorage.getItem("stavby." + k) || ""; } catch { return ""; } },
+                  set: (k, v) => { try { localStorage.setItem("stavby." + k, v); } catch {} } };
+  const state = { history: [], lang: store.get("lang"), corpus: null, token: store.get("token"), busy: null, health: null };
+
+  // ---------------------------------------------------------------- API
+  const headers = () => {
+    const h = { "content-type": "application/json" };
+    if (state.token) h.authorization = "Bearer " + state.token;
+    return h;
+  };
+  async function api(path, opts = {}) {
+    const r = await fetch(path, { ...opts, headers: headers() });
+    if (!r.ok) {
+      let msg = r.status + " " + r.statusText;
+      try { msg = (await r.json()).error || msg; } catch {}
+      if (r.status === 401) tokenIn.hidden = false;
+      throw new Error(msg);
+    }
+    return r.json();
+  }
+  async function loadHealth() {
+    try {
+      const h = await api("/api/health");
+      state.health = h;
+      tokenIn.hidden = !h.auth_required;
+      const d = h.default || {};
+      $("sub").textContent = h.error ? "server: " + h.error : `${d.corpus || h.default_corpus || "default"} · ${d.chunks ?? "?"} pasáží · ${d.llm || "?"}`;
+      $("hintinfo").textContent = `stavby-rag ${h.version}` + (d.embed ? ` · embed ${d.embed.split("/").pop()}` : "");
+      if (state.corpus === null) state.corpus = store.get("corpus") || h.default_corpus || "";
+      await loadCorpora();
+    } catch (e) { $("sub").textContent = "server nedostupný: " + e.message; }
+  }
+  async function loadCorpora() {
+    const rows = await api("/api/corpora");
+    corpusSel.innerHTML = "";
+    for (const c of rows) {
+      const o = document.createElement("option");
+      o.value = c.name; o.textContent = (c.name ? c.label : "učebnice (web)") + (c.chunks ? ` · ${c.chunks}` : "");
+      if (c.books && c.books.length) o.title = c.books.join("\n");
+      corpusSel.appendChild(o);
+    }
+    if (![...corpusSel.options].some(o => o.value === state.corpus)) state.corpus = rows[0] ? rows[0].name : "";
+    corpusSel.value = state.corpus;
+    corpusSel.hidden = rows.length < 2;
+  }
+
+  // Parse `event: x\ndata: {...}\n\n` frames from a fetch body; comments (": ping") are skipped.
+  async function* sse(resp) {
+    const reader = resp.body.getReader(), dec = new TextDecoder();
+    let buf = "";
+    for (;;) {
+      const { value, done } = await reader.read();
+      if (done) break;
+      buf += dec.decode(value, { stream: true });
+      let i;
+      while ((i = buf.indexOf("\n\n")) >= 0) {
+        const frame = buf.slice(0, i); buf = buf.slice(i + 2);
+        let ev = "message", data = "";
+        for (const line of frame.split("\n")) {
+          if (line.startsWith("event:")) ev = line.slice(6).trim();
+          else if (line.startsWith("data:")) data += line.slice(5).trim();
+        }
+        if (data) yield { ev, data: JSON.parse(data) };
+      }
+    }
+  }
+
+  // ---------------------------------------------------------- rendering
+  const esc = s => s.replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  function inline(s, sources) {
+    s = s.replace(/`([^`]+)`/g, "<code>$1</code>")
+         .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")
+         .replace(/(^|[\s(])\*([^*\n]+)\*(?=[\s).,;:]|$)/g, "$1<em>$2</em>");
+    return s.replace(/\[(\d+(?:\s*[,;]\s*\d+)*)\]/g, (m, nums) => nums.split(/\s*[,;]\s*/).map(n => {
+      const src = sources[+n - 1];
+      return src ? `<a class="cite" href="${esc(src.url || "#")}" target="_blank" rel="noopener" title="${esc(src.title || "")}">[${n}]</a>` : `[${n}]`;
+    }).join(""));
+  }
+  function markdown(text, sources) {
+    const out = [];
+    for (const block of esc(text.replace(/\r/g, "")).split(/\n\s*\n/)) {
+      const lines = block.split("\n").filter(l => l.trim());
+      if (!lines.length) continue;
+      const bullet = /^\s*[-*•]\s+/, num = /^\s*\d+[.)]\s+/;
+      if (lines.every(l => bullet.test(l)) || lines.every(l => num.test(l))) {
+        const tag = bullet.test(lines[0]) ? "ul" : "ol";
+        out.push(`<${tag}>` + lines.map(l => `<li>${inline(l.replace(bullet, "").replace(num, ""), sources)}</li>`).join("") + `</${tag}>`);
+      } else if (/^#{1,4}\s/.test(lines[0]) && lines.length === 1) {
+        out.push(`<h4>${inline(lines[0].replace(/^#+\s*/, ""), sources)}</h4>`);
+      } else {
+        // Loose lists inside a paragraph (model often mixes them): split bullets out of prose.
+        const html = [];
+        let list = [];
+        const flush = () => { if (list.length) { html.push("<ul>" + list.map(l => `<li>${inline(l, sources)}</li>`).join("") + "</ul>"); list = []; } };
+        for (const l of lines) {
+          if (bullet.test(l)) list.push(l.replace(bullet, "")); else { flush(); html.push(inline(l, sources)); }
+        }
+        flush();
+        out.push(html.map(h => h.startsWith("<ul>") ? h : `<p>${h}</p>`).join(""));
+      }
+    }
+    return out.join("");
+  }
+  function sourcesHtml(sources) {
+    if (!sources || !sources.length) return "";
+    const seen = new Set();
+    const uniq = [];
+    for (const s of sources) {
+      const k = `${s.chapter}|${s.section}|${s.title}`;
+      if (seen.has(k)) continue;
+      seen.add(k); uniq.push(s);
+    }
+    const items = uniq.map(s => {
+      const loc = [s.chapter != null ? `kap. ${s.chapter}` : "", s.section ? `§ ${s.section}` : "", s.book || "", s.lang || ""].filter(Boolean).join(" · ");
+      return `<li id="${esc(s._id)}"><a href="${esc(s.url || "#")}" target="_blank" rel="noopener">${esc(s.title || s.url || "?")}</a> <span class="loc">${esc(loc)}</span></li>`;
+    });
+    return `<details class="src"><summary>Zdroje (${uniq.length})</summary><ol>${items.join("")}</ol></details>`;
+  }
+  const fmtS = x => x == null ? "?" : (x < 10 ? x.toFixed(1) : Math.round(x)) + " s";
+
+  function addUser(text) {
+    empty.hidden = true;
+    const el = document.createElement("div");
+    el.className = "msg user"; el.innerHTML = `<div class="body"></div>`;
+    el.firstChild.textContent = text;
+    log.appendChild(el); scrollDown(true);
+  }
+  function addBot() {
+    const el = document.createElement("div");
+    el.className = "msg bot";
+    el.innerHTML = `<div class="status"><span class="dot"></span><span class="txt">hledám v učebnici…</span></div>
+                    <div class="body" hidden></div><div class="srcs"></div><div class="foot"></div>`;
+    log.appendChild(el); scrollDown(true);
+    return el;
+  }
+  function scrollDown(force) {
+    const near = window.innerHeight + window.scrollY >= document.body.scrollHeight - 160;
+    if (force || near) window.scrollTo({ top: document.body.scrollHeight });
+  }
+
+  // ------------------------------------------------------------- asking
+  async function ask(question) {
+    if (state.busy) return;
+    question = question.trim();
+    if (!question) return;
+    addUser(question);
+    const el = addBot(), body = el.querySelector(".body"), status = el.querySelector(".status"), stTxt = status.querySelector(".txt");
+    let sources = [], text = "", raf = 0;
+    const paint = () => { raf = 0; body.innerHTML = markdown(text, sources); body.classList.add("caret"); scrollDown(false); };
+    const ctrl = new AbortController();
+    state.busy = ctrl; sendBtn.textContent = "Zastavit"; q.disabled = true;
+    const t0 = performance.now();
+    try {
+      const r = await fetch("/api/ask", { method: "POST", headers: headers(), signal: ctrl.signal,
+        body: JSON.stringify({ question, corpus: state.corpus, lang: state.lang || null, history: state.history, stream: true }) });
+      if (!r.ok) {
+        let msg = r.status + " " + r.statusText;
+        try { msg = (await r.json()).error || msg; } catch {}
+        if (r.status === 401) tokenIn.hidden = false;
+        throw new Error(msg);
+      }
+      let meta = {}, done = null;
+      for await (const { ev, data } of sse(r)) {
+        if (ev === "meta") { meta = data; stTxt.textContent = "odpovídám…"; }
+        else if (ev === "sources") {
+          sources = data.map((s, i) => ({ ...s, _id: `s${Date.now()}-${i}` }));
+          el.querySelector(".srcs").innerHTML = sourcesHtml(sources);
+        } else if (ev === "token") {
+          if (body.hidden) { body.hidden = false; status.hidden = true; }
+          text += data.t;
+          if (!raf) raf = requestAnimationFrame(paint);
+        } else if (ev === "done") done = data;
+        else if (ev === "error") throw new Error(data.error);
+      }
+      if (raf) cancelAnimationFrame(raf);
+      body.hidden = false; status.hidden = true;
+      body.innerHTML = markdown(text || "(prázdná odpověď)", sources);
+      const t = (done && done.timings) || {};
+      const bits = [];
+      if (done && done.cached) bits.push("z cache");
+      else { bits.push(`hledání ${fmtS(t.retrieve)}`); bits.push(`odpověď ${fmtS(t.generate)}`); }
+      if (meta.backend) bits.push(meta.backend);
+      if (meta.lang) bits.push(meta.lang);
+      el.querySelector(".foot").textContent = bits.join(" · ");
+      state.history.push({ role: "user", content: question }, { role: "assistant", content: text });
+      state.history = state.history.slice(-8);
+    } catch (e) {
+      if (raf) cancelAnimationFrame(raf);
+      status.hidden = true; body.hidden = false;
+      if (e.name === "AbortError") {
+        body.innerHTML = markdown(text, sources) || "<p><em>zastaveno</em></p>";
+        el.querySelector(".foot").textContent = `zastaveno po ${fmtS((performance.now() - t0) / 1000)}`;
+        if (text) { state.history.push({ role: "user", content: question }, { role: "assistant", content: text }); state.history = state.history.slice(-8); }
+      } else {
+        el.classList.add("error");
+        body.textContent = "Chyba: " + e.message;
+      }
+    } finally {
+      body.classList.remove("caret");
+      state.busy = null; sendBtn.textContent = "Odeslat"; q.disabled = false; q.focus();
+      scrollDown(false);
+    }
+  }
+
+  // -------------------------------------------------------------- wiring
+  form.addEventListener("submit", e => {
+    e.preventDefault();
+    if (state.busy) { state.busy.abort(); return; }
+    const text = q.value; q.value = ""; autosize();
+    ask(text);
+  });
+  q.addEventListener("keydown", e => {
+    if (e.key === "Enter" && !e.shiftKey && !e.isComposing) { e.preventDefault(); form.requestSubmit(); }
+  });
+  const autosize = () => { q.style.height = "auto"; q.style.height = Math.min(q.scrollHeight, window.innerHeight * .4) + "px"; };
+  q.addEventListener("input", autosize);
+  empty.addEventListener("click", e => { const c = e.target.closest(".chip"); if (c) ask(c.textContent); });
+  $("reset").addEventListener("click", () => {
+    if (state.busy) state.busy.abort();
+    state.history = [];
+    log.querySelectorAll(".msg").forEach(m => m.remove());
+    empty.hidden = false; q.focus();
+  });
+  corpusSel.addEventListener("change", () => { state.corpus = corpusSel.value; store.set("corpus", state.corpus); state.history = []; });
+  langSeg.addEventListener("click", e => {
+    const b = e.target.closest("button"); if (!b) return;
+    langSeg.querySelectorAll("button").forEach(x => x.classList.toggle("on", x === b));
+    state.lang = b.dataset.v; store.set("lang", state.lang);
+  });
+  langSeg.querySelectorAll("button").forEach(b => b.classList.toggle("on", b.dataset.v === state.lang));
+  tokenIn.value = state.token;
+  tokenIn.addEventListener("change", () => { state.token = tokenIn.value.trim(); store.set("token", state.token); loadHealth(); });
+
+  loadHealth();
+})();
+</script>
+</body>
+</html>

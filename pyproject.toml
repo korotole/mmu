@@ -1,0 +1,81 @@
+[project]
+name = "stavby-rag"
+version = "0.3.0"
+description = "Local RAG over the CTU multimedia textbook 'Priprava a realizace staveb' (technologie.fsv.cvut.cz)"
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{ name = "Oleksandr Korotetskyi" }]
+keywords = ["rag", "retrieval", "ollama", "qwen3", "construction", "czech", "cvut", "textbook"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Console",
+    "Intended Audience :: Education",
+    "Intended Audience :: Developers",
+    "Natural Language :: Czech",
+    "Natural Language :: English",
+    "Operating System :: MacOS",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Text Processing :: Indexing",
+]
+requires-python = ">=3.12,<3.13"
+# Core: crawl, chunk, BM25 + dense index, Ollama embeddings/reranker/LLM, Anthropic LLM, PDF text layer.
+dependencies = [
+    "typer>=0.12",
+    "rich>=13",
+    "httpx>=0.27",
+    "beautifulsoup4>=4.12",
+    "lxml>=5",
+    "numpy>=1.26",
+    "bm25s>=0.2",
+    "anthropic>=1.0",
+    "pymupdf>=1.28.2",
+]
+
+[project.optional-dependencies]
+# HF / sentence-transformers embedding + CrossEncoder reranker backends (STAVBY_*_BACKEND=st).
+st = [
+    "sentence-transformers>=3.0",
+    "torch>=2.3",
+    "hf-transfer>=0.1.9",
+]
+# Apple Vision OCR for scanned / broken-font PDFs (macOS only).
+ocr = ["ocrmac>=1.0.1; sys_platform == 'darwin'"]
+# `stavby serve`: HTTP API + web UI.
+web = [
+    "fastapi>=0.115",
+    "uvicorn[standard]>=0.30",
+    "sse-starlette>=2",
+]
+all = ["stavby-rag[st,ocr,web]"]
+
+[project.urls]
+Homepage = "https://github.com/okorotetskyi/stavby-rag"
+Source = "https://github.com/okorotetskyi/stavby-rag"
+Textbook = "https://technologie.fsv.cvut.cz/vyuka/podklady-k-vyuce-education/multimedialni-ucebnice-priprava-a-realizace-objektu-a-staveb/"
+
+[project.scripts]
+stavby = "stavby_rag.cli:app"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.sdist]
+include = ["src/stavby_rag", "tests", "eval", "README.md", "LICENSE", ".env.example", "install.sh", "uninstall.sh"]
+
+[tool.hatch.build.targets.wheel]
+# Everything under the package dir ships, including non-.py assets (e.g. static/index.html).
+packages = ["src/stavby_rag"]
+
+[tool.pytest.ini_options]
+# PyMuPDF's SWIG bindings emit DeprecationWarnings on import; not actionable here.
+filterwarnings = ["ignore:builtin type Swig.*:DeprecationWarning"]
+
+[dependency-groups]
+dev = [
+    "pytest>=9.1.1",
+]

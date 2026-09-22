@@ -1,0 +1,193 @@
+<?xml version='1.0' encoding='utf-8'?>
+<mxfile host="app.diagrams.net" agent="stavby-rag docs" version="24.7.17" type="device">
+  <diagram name="architecture" id="stavby-rag-architecture">
+    <mxGraphModel dx="1400" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1400" pageHeight="990" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="&lt;b&gt;stavby-rag&lt;/b&gt; — local RAG over the CTU construction-technology textbook" style="text;html=1;align=left;verticalAlign=middle;sketch=1;fontFamily=Architects Daughter;fontSize=20;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="30" y="16" width="760" height="34" as="geometry" />
+        </mxCell>
+        <mxCell id="n_laptop" value="everything runs on one laptop&lt;br&gt;(24 GB Mac: Ollama + Python, no services)" style="shape=note;size=16;whiteSpace=wrap;html=1;sketch=1;jiggle=2;align=left;spacingLeft=6;spacingTop=2;fontFamily=Architects Daughter;strokeColor=#4D4D4D;fontColor=#333333;fillColor=#FFF2CC;fontSize=11;rotation=-2;shadow=0;" vertex="1" parent="1">
+          <mxGeometry x="1146" y="6" width="224" height="54" as="geometry" />
+        </mxCell>
+        <mxCell id="off" value="Offline: build the index (once)   —   &lt;i&gt;stavby crawl | ingest | index&lt;/i&gt;" style="swimlane;rounded=1;sketch=1;jiggle=2;html=1;startSize=36;horizontal=1;whiteSpace=wrap;swimlaneFillColor=#FFFFFF;fontSize=15;fontStyle=1;arcSize=6;fontFamily=Architects Daughter;strokeColor=#4D4D4D;fontColor=#333333;fillColor=#F5F5F5;" vertex="1" parent="1">
+          <mxGeometry x="30" y="70" width="1338" height="384" as="geometry" />
+        </mxCell>
+        <mxCell id="site" value="&lt;b&gt;Textbook site&lt;/b&gt;&lt;br&gt;technologie.fsv.cvut.cz&lt;br&gt;4 editions · windows-1250 HTML 4" style="rounded=1;whiteSpace=wrap;html=1;sketch=1;jiggle=2;curveFitting=1;arcSize=14;fontFamily=Architects Daughter;strokeColor=#4D4D4D;fontColor=#333333;fontSize=12;spacing=4;fillColor=#F5F5F5;" vertex="1" parent="off">
+          <mxGeometry x="22" y="66" width="186" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="pdf" value="&lt;b&gt;PDF books&lt;/b&gt;&lt;br&gt;scanned / broken text layer" style="rounded=1;whiteSpace=wrap;html=1;sketch=1;jiggle=2;curveFitting=1;arcSize=14;fontFamily=Architects Daughter;strokeColor=#4D4D4D;fontColor=#333333;fontSize=12;spacing=4;fillColor=#F5F5F5;" vertex="1" parent="off">
+          <mxGeometry x="30" y="226" width="172" height="66" as="geometry" />
+        </mxCell>
+        <mxCell id="crawler" value="&lt;b&gt;Crawler&lt;/b&gt;&lt;br&gt;scoped BFS + extractor" style="rounded=1;whiteSpace=wrap;html=1;sketch=1;jiggle=2;curveFitting=1;arcSize=14;fontFamily=Architects Daughter;strokeColor=#4D4D4D;fontColor=#333333;fontSize=12;spacing=4;fillColor=#DAE8FC;" vertex="1" parent="off">
+          <mxGeometry x="262" y="70" width="152" height="74" as="geometry" />
+        </mxCell>
+        <mxCell id="pdfbook" value="&lt;b&gt;PdfBook&lt;/b&gt;&lt;br&gt;PyMuPDF + Apple Vision OCR" style="rounded=1;whiteSpace=wrap;html=1;sketch=1;jiggle=2;curveFitting=1;arcSize=14;fontFamily=Architects Daughter;strokeColor=#4D4D4D;fontColor=#333333;fontSize=12;spacing=4;fillColor=#DAE8FC;" vertex="1" parent="off">
+          <mxGeometry x="258" y="218" width="170" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="pages" value="&lt;b&gt;data/pages.jsonl&lt;/b&gt;&lt;br&gt;Page records: url, lang, edition,&lt;br&gt;chapter, section, title, text" style="rounded=1;whiteSpace=wrap;html=1;sketch=1;jiggle=2;curveFitting=1;arcSize=14;fontFamily=Architects Daughter;strokeColor=#4D4D4D;fontColor=#333333;fontSize=12;spacing=4;fillColor=#FFF2CC;shape=document;boundedLbl=1;size=0.18;" vertex="1" parent="off">
+          <mxGeometry x="486" y="140" width="184" height="88" as="geometry" />
+        </mxCell>
+        <mxCell id="chunker" value="&lt;b&gt;Chunker&lt;/b&gt;&lt;br&gt;~1400 chars, 200 overlap&lt;br&gt;breadcrumb prefix" style="rounded=1;whiteSpace=wrap;html=1;sketch=1;jiggle=2;curveFitting=1;arcSize=14;fontFamily=Architects Daughter;strokeColor=#4D4D4D;fontColor=#333333;fontSize=12;spacing=4;fillColor=#DAE8FC;" vertex="1" parent="off">
+          <mxGeometry x="712" y="136" width="168" height="92" as="geometry" />
+        </mxCell>
+        <mxCell id="embed" value="&lt;b&gt;Qwen3-Embedding-8B&lt;/b&gt; Q8_0&lt;br&gt;via Ollama · 4096-d, L2-normalised" style="rounded=1;whiteSpace=wrap;html=1;sketch=1;jiggle=2;curveFitting=1;arcSize=14;fontFamily=Architects Daughter;strokeColor=#4D4D4D;fontColor=#333333;fontSize=12;spacing=4;fillColor=#DAE8FC;" vertex="1" parent="off">
+          <mxGeometry x="926" y="60" width="186" height="84" as="geometry" />
+        </mxCell>
+        <mxCell id="bm25" value="&lt;b&gt;BM25&lt;/b&gt; (bm25s)&lt;br&gt;diacritics-folded + prefix stem" style="rounded=1;whiteSpace=wrap;html=1;sketch=1;jiggle=2;curveFitting=1;arcSize=14;fontFamily=Architects Daughter;strokeColor=#4D4D4D;fontColor=#333333;fontSize=12;spacing=4;fillColor=#DAE8FC;" vertex="1" parent="off">
+          <mxGeometry x="934" y="230" width="174" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="idx" value="&lt;b&gt;data/index/&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;sketch=1;jiggle=2;curveFitting=1;arcSize=14;fontFamily=Architects Daughter;strokeColor=#4D4D4D;fontColor=#333333;fontSize=12;spacing=4;fillColor=#FFF2CC;dashed=1;dashPattern=8 6;verticalAlign=top;spacingTop=2;fontSize=13;" vertex="1" parent="off">
+          <mxGeometry x="1140" y="48" width="180" height="318" as="geometry" />
+        </mxCell>
+        <mxCell id="f_chunks" value="chunks.jsonl" style="rounded=1;whiteSpace=wrap;html=1;sketch=1;jiggle=2;curveFitting=1;arcSize=14;fontFamily=Architects Daughter;strokeColor=#4D4D4D;fontColor=#333333;fontSize=12;spacing=4;fillColor=#FFFFFF;" vertex="1" parent="idx">
+          <mxGeometry x="14" y="46" width="152" height="46" as="geometry" />
+        </mxCell>
+        <mxCell id="f_dense" value="dense.npy&lt;br&gt;N × 4096 float32" style="rounded=1;whiteSpace=wrap;html=1;sketch=1;jiggle=2;curveFitting=1;arcSize=14;fontFamily=Architects Daughter;strokeColor=#4D4D4D;fontColor=#333333;fontSize=12;spacing=4;fillColor=#FFFFFF;" vertex="1" parent="idx">
+          <mxGeometry x="12" y="118" width="156" height="54" as="geometry" />
+        </mxCell>
+        <mxCell id="f_bm25" value="bm25/" style="rounded=1;whiteSpace=wrap;html=1;sketch=1;jiggle=2;curveFitting=1;arcSize=14;fontFamily=Architects Daughter;strokeColor=#4D4D4D;fontColor=#333333;fontSize=12;spacing=4;fillColor=#FFFFFF;" vertex="1" parent="idx">
+          <mxGeometry x="16" y="196" width="148" height="44" as="geometry" />
+        </mxCell>
+        <mxCell id="f_meta" value="meta.json&lt;br&gt;embed backend + model" style="rounded=1;whiteSpace=wrap;html=1;sketch=1;jiggle=2;curveFitting=1;arcSize=14;fontFamily=Architects Daughter;strokeColor=#4D4D4D;fontColor=#333333;fontSize=12;spacing=4;fillColor=#FFFFFF;" vertex="1" parent="idx">
+          <mxGeometry x="14" y="260" width="152" height="46" as="geometry" />
+        </mxCell>
+        <mxCell id="n_cosine" value="~1.4k chunks → brute-force cosine over dense.npy beats a vector DB here (zero extra deps)" style="shape=note;size=16;whiteSpace=wrap;html=1;sketch=1;jiggle=2;align=left;spacingLeft=6;spacingTop=2;fontFamily=Architects Daughter;strokeColor=#4D4D4D;fontColor=#333333;fillColor=#FFF2CC;fontSize=11;rotation=2;shadow=0;" vertex="1" parent="off">
+          <mxGeometry x="556" y="268" width="270" height="64" as="geometry" />
+        </mxCell>
+        <mxCell id="e1" value="HTML" style="edgeStyle=none;curved=1;rounded=1;sketch=1;jiggle=2;html=1;endArrow=classic;endFill=1;strokeColor=#4D4D4D;strokeWidth=1.5;fontFamily=Architects Daughter;fontSize=11;fontColor=#555555;labelBackgroundColor=#FFFFFF;" edge="1" parent="off" source="site" target="crawler">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e2" value="" style="edgeStyle=none;curved=1;rounded=1;sketch=1;jiggle=2;html=1;endArrow=classic;endFill=1;strokeColor=#4D4D4D;strokeWidth=1.5;fontFamily=Architects Daughter;fontSize=11;fontColor=#555555;labelBackgroundColor=#FFFFFF;" edge="1" parent="off" source="pdf" target="pdfbook">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e3" value="Page records" style="edgeStyle=none;curved=1;rounded=1;sketch=1;jiggle=2;html=1;endArrow=classic;endFill=1;strokeColor=#4D4D4D;strokeWidth=1.5;fontFamily=Architects Daughter;fontSize=11;fontColor=#555555;labelBackgroundColor=#FFFFFF;" edge="1" parent="off" source="crawler" target="pages">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e4" value="same Page records" style="edgeStyle=none;curved=1;rounded=1;sketch=1;jiggle=2;html=1;endArrow=classic;endFill=1;strokeColor=#4D4D4D;strokeWidth=1.5;fontFamily=Architects Daughter;fontSize=11;fontColor=#555555;labelBackgroundColor=#FFFFFF;" edge="1" parent="off" source="pdfbook" target="pages">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e5" value="" style="edgeStyle=none;curved=1;rounded=1;sketch=1;jiggle=2;html=1;endArrow=classic;endFill=1;strokeColor=#4D4D4D;strokeWidth=1.5;fontFamily=Architects Daughter;fontSize=11;fontColor=#555555;labelBackgroundColor=#FFFFFF;" edge="1" parent="off" source="pages" target="chunker">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e6" value="Chunk[]" style="edgeStyle=none;curved=1;rounded=1;sketch=1;jiggle=2;html=1;endArrow=classic;endFill=1;strokeColor=#4D4D4D;strokeWidth=1.5;fontFamily=Architects Daughter;fontSize=11;fontColor=#555555;labelBackgroundColor=#FFFFFF;" edge="1" parent="off" source="chunker" target="embed">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e7" value="Chunk[]" style="edgeStyle=none;curved=1;rounded=1;sketch=1;jiggle=2;html=1;endArrow=classic;endFill=1;strokeColor=#4D4D4D;strokeWidth=1.5;fontFamily=Architects Daughter;fontSize=11;fontColor=#555555;labelBackgroundColor=#FFFFFF;" edge="1" parent="off" source="chunker" target="bm25">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e8" value="" style="edgeStyle=none;curved=1;rounded=1;sketch=1;jiggle=2;html=1;endArrow=classic;endFill=1;strokeColor=#4D4D4D;strokeWidth=1.5;fontFamily=Architects Daughter;fontSize=11;fontColor=#555555;labelBackgroundColor=#FFFFFF;dashed=1;strokeWidth=1;" edge="1" parent="off" source="chunker" target="f_chunks">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1000" y="178" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e9" value="" style="edgeStyle=none;curved=1;rounded=1;sketch=1;jiggle=2;html=1;endArrow=classic;endFill=1;strokeColor=#4D4D4D;strokeWidth=1.5;fontFamily=Architects Daughter;fontSize=11;fontColor=#555555;labelBackgroundColor=#FFFFFF;" edge="1" parent="off" source="embed" target="f_dense">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e10" value="" style="edgeStyle=none;curved=1;rounded=1;sketch=1;jiggle=2;html=1;endArrow=classic;endFill=1;strokeColor=#4D4D4D;strokeWidth=1.5;fontFamily=Architects Daughter;fontSize=11;fontColor=#555555;labelBackgroundColor=#FFFFFF;" edge="1" parent="off" source="bm25" target="f_bm25">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e11" value="" style="edgeStyle=none;curved=1;rounded=1;sketch=1;jiggle=2;html=1;endArrow=classic;endFill=1;strokeColor=#4D4D4D;strokeWidth=1.5;fontFamily=Architects Daughter;fontSize=11;fontColor=#555555;labelBackgroundColor=#FFFFFF;dashed=1;strokeWidth=1;" edge="1" parent="off" source="embed" target="f_meta">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1126" y="170" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="on" value="Online: answer a question   —   &lt;i&gt;stavby ask | chat | search&lt;/i&gt;" style="swimlane;rounded=1;sketch=1;jiggle=2;html=1;startSize=36;horizontal=1;whiteSpace=wrap;swimlaneFillColor=#FFFFFF;fontSize=15;fontStyle=1;arcSize=6;fontFamily=Architects Daughter;strokeColor=#4D4D4D;fontColor=#333333;fillColor=#F5F5F5;" vertex="1" parent="1">
+          <mxGeometry x="30" y="486" width="1338" height="486" as="geometry" />
+        </mxCell>
+        <mxCell id="question" value="&lt;b&gt;Question&lt;/b&gt;&lt;br&gt;CLI &lt;code&gt;stavby ask&lt;/code&gt; / &lt;code&gt;chat&lt;/code&gt;&lt;br&gt;or Web UI / REST API" style="rounded=1;whiteSpace=wrap;html=1;sketch=1;jiggle=2;curveFitting=1;arcSize=14;fontFamily=Architects Daughter;strokeColor=#4D4D4D;fontColor=#333333;fontSize=12;spacing=4;fillColor=#F5F5F5;" vertex="1" parent="on">
+          <mxGeometry x="22" y="76" width="192" height="92" as="geometry" />
+        </mxCell>
+        <mxCell id="engine" value="&lt;b&gt;Engine&lt;/b&gt;&lt;br&gt;index loaded once in memory&lt;br&gt;models kept warm&lt;br&gt;query / answer cache" style="rounded=1;whiteSpace=wrap;html=1;sketch=1;jiggle=2;curveFitting=1;arcSize=14;fontFamily=Architects Daughter;strokeColor=#4D4D4D;fontColor=#333333;fontSize=12;spacing=4;fillColor=#DAE8FC;" vertex="1" parent="on">
+          <mxGeometry x="254" y="62" width="206" height="122" as="geometry" />
+        </mxCell>
+        <mxCell id="lang" value="&lt;b&gt;lang detect + mask&lt;/b&gt;&lt;br&gt;cs / en (diacritics, function words)&lt;br&gt;edition: full | demo" style="rounded=1;whiteSpace=wrap;html=1;sketch=1;jiggle=2;curveFitting=1;arcSize=14;fontFamily=Architects Daughter;strokeColor=#4D4D4D;fontColor=#333333;fontSize=12;spacing=4;fillColor=#DAE8FC;" vertex="1" parent="on">
+          <mxGeometry x="500" y="76" width="178" height="92" as="geometry" />
+        </mxCell>
+        <mxCell id="hybrid" value="&lt;b&gt;dense top-40 ∪ BM25 top-40&lt;/b&gt;&lt;br&gt;cosine over dense.npy&lt;br&gt;+ bm25s query" style="rounded=1;whiteSpace=wrap;html=1;sketch=1;jiggle=2;curveFitting=1;arcSize=14;fontFamily=Architects Daughter;strokeColor=#4D4D4D;fontColor=#333333;fontSize=12;spacing=4;fillColor=#DAE8FC;" vertex="1" parent="on">
+          <mxGeometry x="718" y="70" width="190" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="rrf1" value="&lt;b&gt;RRF&lt;/b&gt;&lt;br&gt;k=60" style="ellipse;rounded=1;whiteSpace=wrap;html=1;sketch=1;jiggle=2;curveFitting=1;arcSize=14;fontFamily=Architects Daughter;strokeColor=#4D4D4D;fontColor=#333333;fontSize=12;spacing=4;fillColor=#DAE8FC;" vertex="1" parent="on">
+          <mxGeometry x="946" y="90" width="96" height="62" as="geometry" />
+        </mxCell>
+        <mxCell id="reranker" value="&lt;b&gt;Qwen3-Reranker-8B&lt;/b&gt; Q8_0&lt;br&gt;P(yes) from Ollama logprobs&lt;br&gt;on the top 20 candidates" style="rounded=1;whiteSpace=wrap;html=1;sketch=1;jiggle=2;curveFitting=1;arcSize=14;fontFamily=Architects Daughter;strokeColor=#4D4D4D;fontColor=#333333;fontSize=12;spacing=4;fillColor=#DAE8FC;" vertex="1" parent="on">
+          <mxGeometry x="1084" y="62" width="228" height="116" as="geometry" />
+        </mxCell>
+        <mxCell id="rrf2" value="&lt;b&gt;RRF&lt;/b&gt;&lt;br&gt;(rerank rank, retrieval rank)" style="ellipse;rounded=1;whiteSpace=wrap;html=1;sketch=1;jiggle=2;curveFitting=1;arcSize=14;fontFamily=Architects Daughter;strokeColor=#4D4D4D;fontColor=#333333;fontSize=12;spacing=4;fillColor=#DAE8FC;" vertex="1" parent="on">
+          <mxGeometry x="1104" y="306" width="190" height="74" as="geometry" />
+        </mxCell>
+        <mxCell id="top10" value="&lt;b&gt;top-10 passages&lt;/b&gt;&lt;br&gt;neighbour de-dup" style="rounded=1;whiteSpace=wrap;html=1;sketch=1;jiggle=2;curveFitting=1;arcSize=14;fontFamily=Architects Daughter;strokeColor=#4D4D4D;fontColor=#333333;fontSize=12;spacing=4;fillColor=#FFF2CC;shape=document;boundedLbl=1;size=0.18;" vertex="1" parent="on">
+          <mxGeometry x="892" y="302" width="154" height="84" as="geometry" />
+        </mxCell>
+        <mxCell id="prompt" value="&lt;b&gt;prompt&lt;/b&gt;&lt;br&gt;system rules + numbered passages&lt;br&gt;+ question (answer in its language)" style="rounded=1;whiteSpace=wrap;html=1;sketch=1;jiggle=2;curveFitting=1;arcSize=14;fontFamily=Architects Daughter;strokeColor=#4D4D4D;fontColor=#333333;fontSize=12;spacing=4;fillColor=#FFF2CC;" vertex="1" parent="on">
+          <mxGeometry x="650" y="298" width="196" height="96" as="geometry" />
+        </mxCell>
+        <mxCell id="llm" value="&lt;b&gt;LLM&lt;/b&gt;&lt;br&gt;Claude &lt;code&gt;claude-opus-5&lt;/code&gt; (Anthropic API)&lt;br&gt;or local &lt;code&gt;qwen3:14b&lt;/code&gt; (Ollama)" style="rounded=1;whiteSpace=wrap;html=1;sketch=1;jiggle=2;curveFitting=1;arcSize=14;fontFamily=Architects Daughter;strokeColor=#4D4D4D;fontColor=#333333;fontSize=12;spacing=4;fillColor=#DAE8FC;" vertex="1" parent="on">
+          <mxGeometry x="388" y="292" width="224" height="106" as="geometry" />
+        </mxCell>
+        <mxCell id="answer" value="&lt;b&gt;streamed answer&lt;/b&gt;&lt;br&gt;[n] citations + source links&lt;br&gt;back to the textbook pages" style="rounded=1;whiteSpace=wrap;html=1;sketch=1;jiggle=2;curveFitting=1;arcSize=14;fontFamily=Architects Daughter;strokeColor=#4D4D4D;fontColor=#333333;fontSize=12;spacing=4;fillColor=#F5F5F5;" vertex="1" parent="on">
+          <mxGeometry x="22" y="300" width="214" height="94" as="geometry" />
+        </mxCell>
+        <mxCell id="n_rerank" value="reranker prefill = the slow step (~50 s for 20 passages) → cache answers + keep models resident" style="shape=note;size=16;whiteSpace=wrap;html=1;sketch=1;jiggle=2;align=left;spacingLeft=6;spacingTop=2;fontFamily=Architects Daughter;strokeColor=#4D4D4D;fontColor=#333333;fillColor=#FFF2CC;fontSize=11;rotation=-2;shadow=0;" vertex="1" parent="on">
+          <mxGeometry x="936" y="408" width="330" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="o1" value="" style="edgeStyle=none;curved=1;rounded=1;sketch=1;jiggle=2;html=1;endArrow=classic;endFill=1;strokeColor=#4D4D4D;strokeWidth=1.5;fontFamily=Architects Daughter;fontSize=11;fontColor=#555555;labelBackgroundColor=#FFFFFF;" edge="1" parent="on" source="question" target="engine">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="o2" value="" style="edgeStyle=none;curved=1;rounded=1;sketch=1;jiggle=2;html=1;endArrow=classic;endFill=1;strokeColor=#4D4D4D;strokeWidth=1.5;fontFamily=Architects Daughter;fontSize=11;fontColor=#555555;labelBackgroundColor=#FFFFFF;" edge="1" parent="on" source="engine" target="lang">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="o3" value="mask" style="edgeStyle=none;curved=1;rounded=1;sketch=1;jiggle=2;html=1;endArrow=classic;endFill=1;strokeColor=#4D4D4D;strokeWidth=1.5;fontFamily=Architects Daughter;fontSize=11;fontColor=#555555;labelBackgroundColor=#FFFFFF;" edge="1" parent="on" source="lang" target="hybrid">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="o4" value="" style="edgeStyle=none;curved=1;rounded=1;sketch=1;jiggle=2;html=1;endArrow=classic;endFill=1;strokeColor=#4D4D4D;strokeWidth=1.5;fontFamily=Architects Daughter;fontSize=11;fontColor=#555555;labelBackgroundColor=#FFFFFF;" edge="1" parent="on" source="hybrid" target="rrf1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="o5" value="top 20" style="edgeStyle=none;curved=1;rounded=1;sketch=1;jiggle=2;html=1;endArrow=classic;endFill=1;strokeColor=#4D4D4D;strokeWidth=1.5;fontFamily=Architects Daughter;fontSize=11;fontColor=#555555;labelBackgroundColor=#FFFFFF;" edge="1" parent="on" source="rrf1" target="reranker">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="o6" value="rerank order" style="edgeStyle=none;curved=1;rounded=1;sketch=1;jiggle=2;html=1;endArrow=classic;endFill=1;strokeColor=#4D4D4D;strokeWidth=1.5;fontFamily=Architects Daughter;fontSize=11;fontColor=#555555;labelBackgroundColor=#FFFFFF;" edge="1" parent="on" source="reranker" target="rrf2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="o7" value="" style="edgeStyle=none;curved=1;rounded=1;sketch=1;jiggle=2;html=1;endArrow=classic;endFill=1;strokeColor=#4D4D4D;strokeWidth=1.5;fontFamily=Architects Daughter;fontSize=11;fontColor=#555555;labelBackgroundColor=#FFFFFF;" edge="1" parent="on" source="rrf2" target="top10">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="o8" value="retrieval order" style="edgeStyle=none;curved=1;rounded=1;sketch=1;jiggle=2;html=1;endArrow=classic;endFill=1;strokeColor=#4D4D4D;strokeWidth=1.5;fontFamily=Architects Daughter;fontSize=11;fontColor=#555555;labelBackgroundColor=#FFFFFF;dashed=1;strokeWidth=1;" edge="1" parent="on" source="rrf1" target="rrf2">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="994" y="240" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="o9" value="" style="edgeStyle=none;curved=1;rounded=1;sketch=1;jiggle=2;html=1;endArrow=classic;endFill=1;strokeColor=#4D4D4D;strokeWidth=1.5;fontFamily=Architects Daughter;fontSize=11;fontColor=#555555;labelBackgroundColor=#FFFFFF;" edge="1" parent="on" source="top10" target="prompt">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="o10" value="" style="edgeStyle=none;curved=1;rounded=1;sketch=1;jiggle=2;html=1;endArrow=classic;endFill=1;strokeColor=#4D4D4D;strokeWidth=1.5;fontFamily=Architects Daughter;fontSize=11;fontColor=#555555;labelBackgroundColor=#FFFFFF;" edge="1" parent="on" source="prompt" target="llm">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="o11" value="tokens stream" style="edgeStyle=none;curved=1;rounded=1;sketch=1;jiggle=2;html=1;endArrow=classic;endFill=1;strokeColor=#4D4D4D;strokeWidth=1.5;fontFamily=Architects Daughter;fontSize=11;fontColor=#555555;labelBackgroundColor=#FFFFFF;" edge="1" parent="on" source="llm" target="answer">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="o12" value="" style="edgeStyle=none;curved=1;rounded=1;sketch=1;jiggle=2;html=1;endArrow=classic;endFill=1;strokeColor=#4D4D4D;strokeWidth=1.5;fontFamily=Architects Daughter;fontSize=11;fontColor=#555555;labelBackgroundColor=#FFFFFF;dashed=1;strokeWidth=1;" edge="1" parent="on" source="answer" target="question">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="92" y="236" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="x1" value="loaded once at start" style="edgeStyle=none;curved=1;rounded=1;sketch=1;jiggle=2;html=1;endArrow=classic;endFill=1;strokeColor=#4D4D4D;strokeWidth=1.5;fontFamily=Architects Daughter;fontSize=11;fontColor=#555555;labelBackgroundColor=#FFFFFF;dashed=1;strokeWidth=1;" edge="1" parent="1" source="idx" target="engine">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="560" y="470" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
